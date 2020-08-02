@@ -6,7 +6,6 @@ from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import re
-import pandas as pd
 import numpy as np
 try:
     import urlparse
@@ -18,11 +17,14 @@ class ChannelCountryScraper(object):
 
 	def __init__(self):
 		self.channel_about_urls = []
+		self.channel_cuntry = []
 
 
 	def run(self):
 		self.read_youtube_urls()
 		self.get_page_source()
+		self.driver.close()
+		# self.parse_channel_country()
 		# self.channel_country_data_save_as_csv_file()
 
 
@@ -32,10 +34,9 @@ class ChannelCountryScraper(object):
 		channel_urls = channel_urls_ndarray.tolist()
 		for i in channel_urls:
 			youtube_url = 'https://www.youtube.com'
-			channel_url = ('%s' % i)
+			self.channel_url = ('%s' % i)
 			about_url = 'about'
-			channel_about_url = urlparse.urljoin(youtube_url, channel_url+'/about')
-			print(channel_about_url)
+			channel_about_url = urlparse.urljoin(youtube_url, self.channel_url+'/about')
 			self.channel_about_urls.append(channel_about_url)
 
 
@@ -53,13 +54,71 @@ class ChannelCountryScraper(object):
 				for j in range(100):
 					actions.send_keys(Keys.PAGE_DOWN)
 				actions.perform()
-				sleep(2.5)
+				# sleep(1)
 				html = self.driver.page_source
 				if self.current_html != html:
 					self.current_html=html
 				else:
-					self.driver.close()
+					self.parse_channel_country()
 					break
+
+
+	def parse_channel_country(self):
+		soup = BeautifulSoup(self.current_html, 'html.parser')
+		'''
+			CuntryOfIntExtractionFunction
+		'''
+		for i in soup.find_all("td", class_="style-scope ytd-channel-about-metadata-renderer"):
+			cuntry_i_findall = re.findall('<yt-formatted-string class="style-scope ytd-channel-about-metadata-renderer">.*</yt-formatted-string>', str(i))
+			cuntry_i_replace = str(cuntry_i_findall).replace('<yt-formatted-string class="style-scope ytd-channel-about-metadata-renderer">', '').replace('</yt-formatted-string>', '')
+			cuntry = str(cuntry_i_replace).replace("['", '').replace("']", '')
+			'''
+			NoneExclusion
+			'''
+			if "<" in cuntry:
+				cuntry = None
+			if "[]" in str(cuntry):
+				cuntry = None
+			if cuntry is None:
+				continue
+			if str(cuntry):
+				self.channel_cuntry = cuntry
+				# print(cuntry)
+				self.channel_country_write()
+
+
+
+# import StringIO
+# import io 
+# import urllib.request
+# from PIL import Image
+	def channel_country_write(self):
+		# channel_url_data = pd.read_csv('sample.csv',index_col='channel_url')
+		# print(df)
+		# print(self.channel_url)
+		# print(self.channel_cuntry)
+		# data['new_column'] = ''
+		# s = pd.Series(self.channel_cuntry, self.channel_url)
+		# print(self.channel_cuntry)
+		# print(self.channel_url)
+		s = pd.Series({str(self.channel_cuntry): str(self.channel_url)}, name='channel_country')
+		# s3 = s3.append(s4)
+		# df['channel_cuntry'] = s
+		# print(assign(s.values))
+		print(s)
+		df = pd.read_csv('sample.csv', index_col='channel_url')
+		df.insert(len(df.columns), 'channel_country', str(self.channel_cuntry))
+		# print(channel_country_save)
+		print(df)
+		# for index, row in data.iterrows():
+		# 	data['new_column'][index] = self.channel_cuntry
+		# 	data.to_csv('sample.csv', index=False)
+		# 	print(open('sample.csv').read())
+# s = io.BytesIO(text)
+# with open('sample.csv', 'w') as f:
+# 	for line in s:
+# 		f.write(line)
+
 
 
 if __name__ == "__main__":
