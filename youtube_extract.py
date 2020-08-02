@@ -1,13 +1,18 @@
-import os
-# from time import sleep
-# import pandas as pd
-# from bs4 import BeautifulSoup
-# from selenium import webdriver
-# from selenium.webdriver.common.action_chains import ActionChains
-# from selenium.webdriver.common.keys import Keys
-# import re
+import os.path
+from time import sleep
+import pandas as pd
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+import re
 import pandas as pd
 import numpy as np
+try:
+    import urlparse
+except ImportError:
+    import urllib.parse as urlparse
+
 
 
 # data = pd.read_csv('sample.csv', sep=",")
@@ -35,14 +40,13 @@ class ChannelCountryScraper(object):
 		channel_urls_ndarray = channel_url_data.index.values
 		channel_urls = channel_urls_ndarray.tolist()
 		for i in channel_urls:
-			self.youtube_url = "https://www.youtube.com"
-			self.channel_url = ("%s" % i)
-			self.open_channel_url = os.path.join(self.youtube_url, self.channel_url, 'about')
-			print(self.open_channel_url)
+			self.youtube_url = 'https://www.youtube.com'
+			self.channel_url = ('%s' % i)
+			self.open_channel_url = urlparse.urljoin(self.youtube_url, self.channel_url, 'about')
 
 	# def get_page_source(self):
 	# 	self.driver = webdriver.Chrome()
-	# 	self.driver.get(self.channel_about_url)
+	# 	self.driver.get(self.open_channel_url)
 	# 	self.current_html = self.driver.page_source
 	# 	element = self.driver.find_element_by_xpath('//*[@class="style-scope ytd-page-manager"]')
 	# 	actions = ActionChains(self.driver)
