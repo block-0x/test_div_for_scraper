@@ -17,7 +17,7 @@ class ChannelCountryScraper(object):
 
 	def __init__(self):
 		self.channel_about_urls = []
-		self.channel_cuntry = []
+		self.channel_countries = []
 
 
 	def run(self):
@@ -83,7 +83,7 @@ class ChannelCountryScraper(object):
 			if cuntry is None:
 				continue
 			if str(cuntry):
-				self.channel_cuntry.append(cuntry)
+				self.channel_countries.append(cuntry)
 				# print(cuntry)
 				# self.channel_country_write()
 
@@ -96,35 +96,40 @@ class ChannelCountryScraper(object):
 		# # channel_url_data = pd.read_csv('sample.csv',index_col='channel_url')
 		# # print(df)
 		# # print(self.channel_url)
-		# # print(self.channel_cuntry)
+		# # print(self.channel_countries)
 		# # data['new_column'] = ''
-		# # s = pd.Series(self.channel_cuntry, self.channel_url)
-		# print(self.channel_cuntry)
+		# # s = pd.Series(self.channel_countries, self.channel_url)
+		# print(self.channel_countries)
 		# # print(self.channel_url)
-		# df = pd.read_csv('sample.csv', index_col='channel_url')
-		# s = pd.Series({self.channel_cuntry: self.channel_url}, name='channel_country')
+		df = pd.read_csv('sample.csv')
+		# s = pd.Series({self.channel_countries: self.channel_url}, name='channel_country')
 		# # s3 = s3.append(s4)
 		# # df['channel_cuntry'] = s
 		# # print(assign(s.values))
 		# # print(s)
-		# df.insert(len(df.columns), 'channel_country', self.channel_cuntry)
+		# df.insert(len(df.columns), 'channel_country',0)
 		# # pd.DataFrame(df_x).to_csv('sample.csv',index=True)
 		# # print(channel_country_save)
 		# print(df)
-		data = {
-		# "title": self.titles,
-		# "video_url": self.video_urls,
-		# "view": self.views,
-		# "channel_url": self.channel_urls,
-		# "channel_name": self.channel_names,
-		# "video_time": self.video_times,
-		"channel_country": self.channel_cuntry
-		}
-		print(self.channel_cuntry)
-        # print(self.channel_cuntry)
-		pd.DataFrame(data).to_csv('sample.csv',index=True)
+		print(df)
+		# df['new_column'] = 'value'
+		df['channel_country'] = self.channel_countries
+		print(df)
+		pd.DataFrame(df).to_csv('sample.csv',index=False)
+		# data = {
+		# # "title": self.titles,
+		# # "video_url": self.video_urls,
+		# # "view": self.views,
+		# # "channel_url": self.channel_urls,
+		# # "channel_name": self.channel_names,
+		# # "video_time": self.video_times,
+		# "channel_country": self.channel_countries
+		# }
+		# print(self.channel_countries)
+  #       # print(self.channel_countries)
+		# pd.DataFrame(data).to_csv('sample.csv',index=True)
 		# for index, row in data.iterrows():
-		# 	data['new_column'][index] = self.channel_cuntry
+		# 	data['new_column'][index] = self.channel_countries
 		# 	data.to_csv('sample.csv', index=False)
 		# 	print(open('sample.csv').read())
 # s = io.BytesIO(text)
