@@ -23,6 +23,7 @@ class ChannelCountryScraper(object):
 	def run(self):
 		self.read_youtube_urls()
 		self.get_page_source()
+		self.channel_country_write()
 		self.driver.close()
 		# self.parse_channel_country()
 		# self.channel_country_data_save_as_csv_file()
@@ -82,10 +83,9 @@ class ChannelCountryScraper(object):
 			if cuntry is None:
 				continue
 			if str(cuntry):
-				self.channel_cuntry = cuntry
+				self.channel_cuntry.append(cuntry)
 				# print(cuntry)
-				self.channel_country_write()
-
+				# self.channel_country_write()
 
 
 # import StringIO
@@ -93,23 +93,36 @@ class ChannelCountryScraper(object):
 # import urllib.request
 # from PIL import Image
 	def channel_country_write(self):
-		# channel_url_data = pd.read_csv('sample.csv',index_col='channel_url')
+		# # channel_url_data = pd.read_csv('sample.csv',index_col='channel_url')
+		# # print(df)
+		# # print(self.channel_url)
+		# # print(self.channel_cuntry)
+		# # data['new_column'] = ''
+		# # s = pd.Series(self.channel_cuntry, self.channel_url)
+		# print(self.channel_cuntry)
+		# # print(self.channel_url)
+		# df = pd.read_csv('sample.csv', index_col='channel_url')
+		# s = pd.Series({self.channel_cuntry: self.channel_url}, name='channel_country')
+		# # s3 = s3.append(s4)
+		# # df['channel_cuntry'] = s
+		# # print(assign(s.values))
+		# # print(s)
+		# df.insert(len(df.columns), 'channel_country', self.channel_cuntry)
+		# # pd.DataFrame(df_x).to_csv('sample.csv',index=True)
+		# # print(channel_country_save)
 		# print(df)
-		# print(self.channel_url)
-		# print(self.channel_cuntry)
-		# data['new_column'] = ''
-		# s = pd.Series(self.channel_cuntry, self.channel_url)
-		# print(self.channel_cuntry)
-		# print(self.channel_url)
-		s = pd.Series({str(self.channel_cuntry): str(self.channel_url)}, name='channel_country')
-		# s3 = s3.append(s4)
-		# df['channel_cuntry'] = s
-		# print(assign(s.values))
-		print(s)
-		df = pd.read_csv('sample.csv', index_col='channel_url')
-		df.insert(len(df.columns), 'channel_country', str(self.channel_cuntry))
-		# print(channel_country_save)
-		print(df)
+		data = {
+		# "title": self.titles,
+		# "video_url": self.video_urls,
+		# "view": self.views,
+		# "channel_url": self.channel_urls,
+		# "channel_name": self.channel_names,
+		# "video_time": self.video_times,
+		"channel_country": self.channel_cuntry
+		}
+		print(self.channel_cuntry)
+        # print(self.channel_cuntry)
+		pd.DataFrame(data).to_csv('sample.csv',index=True)
 		# for index, row in data.iterrows():
 		# 	data['new_column'][index] = self.channel_cuntry
 		# 	data.to_csv('sample.csv', index=False)
